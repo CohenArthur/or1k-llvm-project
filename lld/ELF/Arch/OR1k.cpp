@@ -20,21 +20,20 @@ class OR1k final : public TargetInfo {
 public:
   OR1k(){};
 
-  virtual RelExpr getRelExpr(RelType Type, const Symbol &S,
-                             const uint8_t *Loc) const {
-      error(getErrorLocation(Loc) +
-            "wtf am I doing here " + toString(Type));
+  virtual RelExpr getRelExpr(RelType type, const Symbol &s,
+                             const uint8_t *loc) const override {
     return R_ABS;
-  };
+  }
 
-  virtual void relocateOne(uint8_t *Loc, RelType Type, uint64_t Val) const {
-    switch (Type) {
+  virtual void relocate(uint8_t *loc, const Relocation &rel,
+                        uint64_t val) const override {
+    switch (rel.type) {
     case R_OR1K_NONE:
-      *Loc = Val;
+      *loc = val;
       break;
     default:
-      error(getErrorLocation(Loc) +
-            "unrecognized relocation: " + toString(Type));
+      error(getErrorLocation(loc) +
+            "unrecognized relocation: " + toString(rel.type));
       // case R_OR1K_32:
       // case R_OR1K_16:
       // case R_OR1K_8:
@@ -62,6 +61,6 @@ public:
 } // namespace
 
 TargetInfo *elf::getOR1kTargetInfo() {
-  static OR1k Target;
-  return &Target;
+  static OR1k target;
+  return &target;
 }
