@@ -22,6 +22,8 @@ public:
 
   virtual RelExpr getRelExpr(RelType Type, const Symbol &S,
                              const uint8_t *Loc) const {
+      error(getErrorLocation(Loc) +
+            "wtf am I doing here " + toString(Type));
     return R_ABS;
   };
 
